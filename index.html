@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lomba Prestasi Jualan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f4f8;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #0077cc;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    input, button {
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #0077cc;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: #0077cc;
+      color: white;
+    }
+    @media (max-width: 500px) {
+      .container {
+        padding: 20px;
+      }
+      input, button {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Lomba Prestasi Jualan</h1>
+
+    <form id="salesForm">
+      <input type="text" id="name" placeholder="Nama Peserta" required />
+      <input type="number" id="sales" placeholder="Jumlah Penjualan Hari Ini" required />
+      <button type="submit">Input Penjualan</button>
+    </form>
+
+    <h2>🏆 Leaderboard</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Posisi</th>
+          <th>Nama</th>
+          <th>Total Penjualan</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const form = document.getElementById('salesForm');
+    const leaderboard = document.getElementById('leaderboard');
+    let data = {};
+
+    form.onsubmit = function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const sales = parseInt(document.getElementById('sales').value);
+
+      if (!name || isNaN(sales)) return;
+
+      data[name] = (data[name] || 0) + sales;
+
+      updateLeaderboard();
+      form.reset();
+    };
+
+    function updateLeaderboard() {
+      const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
+      leaderboard.innerHTML = '';
+      sorted.forEach(([name, total], index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${name}</td>
+          <td>${total}</td>
+        `;
+        leaderboard.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>
